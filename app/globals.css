@@ -3,5 +3,14 @@
 @tailwind utilities;
 
 body{
-  background-color: beige;
+  background-color:beige
+}
+
+nav {
+  /* background-color: rgb(150, 241, 13) */
+  background-color: rgb(255, 0, 255);
+}
+
+.stroke-text {
+  -webkit-text-stroke: 1.5px black; 
 }
