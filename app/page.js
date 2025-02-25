@@ -1,8 +1,8 @@
 import Image from "next/image";
-
+import Feed from "@/components/Feed";
 export default function Home() {
   return (
-    <main className="max-w-[90vw] m-auto my-10">
+    <section className="max-w-[90vw] m-auto my-10">
       <div className="homePage flex flex-col items-center justify-center gap-4">
         <h1 className="text-6xl font-mono stroke-text font-bold bg-gradient-to-r from-blue-400 via-blue-500 to-pink-500 bg-clip-text text-transparent">
           Promptify
@@ -17,6 +17,9 @@ export default function Home() {
           next breakthrough.
         </p>
       </div>
-    </main>
+
+      <Feed/>
+      
+    </section>
   );
 }
