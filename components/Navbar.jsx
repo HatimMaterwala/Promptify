@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 const Navbar = () => {
-  const [isLogged, setIsLogged] = useState(true);
+  const {data:session} = useSession();
 
   const [providers, setProviders] = useState(null);
 
@@ -35,7 +35,7 @@ const Navbar = () => {
           <p className="text-4xl opacity-25 ">Promptify</p>
         </Link>
       </div>
-      {isLogged ? (
+      {session?.user ? (
         <div className="buttons space-x-4">
           <button
             type="button" 
@@ -51,11 +51,11 @@ const Navbar = () => {
           </Link>
           <Link href={"/profile"}>
             <Image
-              className="bg-blend-screen inline"
-              src={"/logo.png"}
+              className="bg-blend-screen inline rounded-full"
+              src={session?.user.image}
               alt="Logo"
-              width={50}
-              height={50}
+              width={40}
+              height={40}
             />
           </Link>
         </div>
