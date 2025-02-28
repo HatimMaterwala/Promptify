@@ -20,7 +20,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className="z-10 m-auto sticky top-4 w-[90vw] flex rounded-md justify-between
+      className="z-10 m-auto sticky top-4 mt-4 w-[90vw] flex rounded-md justify-between
      px-6 items-center h-16 shadow-sm font-mono border border-r-4 border-b-4 border-black"
     >
       <div className="logo">
