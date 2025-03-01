@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,24 +8,28 @@ import { usePathname, useRouter } from "next/navigation";
 const handleToast = () => {
     toast.success("Prompt copied to clipboard!");
 };
-const Promptcard = ({ post, handleTagClick, handleDelete, handleEdit }) => {
+
+const Promptcard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
+  const {data: session} = useSession(); 
   const [copied,setcopied] = useState(false);
+  const Router = useRouter();
+  const pathName = usePathname();
   return (
-    <div className="prompt_card rounded-lg bg-white w-1/3 p-2 shadow-sm border border-r-4 border-b-4 border-black">
+    <div className="prompt_card rounded-lg m-auto bg-white w-[90%] p-2 shadow-sm border border-r-4 border-b-4 border-black">
       <div className="flex justify-between items-center gap-2">
         <div className="flex justify-center items-center gap-2">
           <div>
             <Image
-              src={post.creator.image}
-              alt={post.creator.username}
+              src={post.creator?.image || '/default.jpg'}
+              alt="user_image"
               width={40}
-              height={35}
+              height={40}
               className="cursor-pointer rounded-full object-contain border border-white"
             />
           </div>
           <div className="flex flex-col justify-center">
-            <h2 className="font-bold">{post.creator.username}</h2>
-            <p className="opacity-50">{post.creator.email}</p>
+            <h2 className="font-bold">{post.creator?.username}</h2>
+            <p className="opacity-50">{post.creator?.email}</p>
           </div>
         </div>
         <div className="copy px-5">
@@ -51,6 +54,12 @@ const Promptcard = ({ post, handleTagClick, handleDelete, handleEdit }) => {
           {post.tag}
         </p>
       </div>
+      {session?.user.id === post.creator?._id && pathName =='/profile' && 
+        <div className="flex justify-end gap-4 p-2">
+          <button className="bg-blue-500 text-white rounded-lg p-2 px-4" onClick={handleEdit}>Edit</button>
+          <button className="bg-red-500 text-white rounded-lg p-2 px-4" onClick={handleDelete}>Delete</button>
+        </div>
+      }
       <ToastContainer/>
     </div>
   );

@@ -27,10 +27,8 @@ const handler = NextAuth({
     async signIn({ profile }) {
       try {
         await connectToDB();
-
         // Check if the user exists
         const userExists = await User.findOne({ email: profile.email });
-
         // If the user does not exist, create one
         if (!userExists) {
           await User.create({
