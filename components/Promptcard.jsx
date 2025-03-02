@@ -19,6 +19,7 @@ const Promptcard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
       <div className="flex justify-between items-center gap-2">
         <div className="flex justify-center items-center gap-2">
           <div>
+            {// Create a clickable Profile Image which will redirect to the Profile of that Person}
             <Image
               src={post.creator?.image || '/default.jpg'}
               alt="user_image"
