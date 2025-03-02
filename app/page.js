@@ -17,6 +17,7 @@ export default function Home() {
         </p>
       </div>
 
+      {/* Add a Search Functionality */}
       <Feed/>
       
     </section>
