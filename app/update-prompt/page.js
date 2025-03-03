@@ -1,10 +1,9 @@
 "use client";
-import { useState , useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Form from "../../components/Form";
 
-
-const edit = () => {
+const EditPrompt = () => {
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
   const [post, setPost] = useState({
@@ -12,60 +11,57 @@ const edit = () => {
     tag: "",
   });
 
-  const searchParams = useSearchParams(); 
+  const searchParams = useSearchParams();
   const promptId = searchParams.get("id");
 
-  useEffect(()=>{
-    if (!promptId) {
-        console.error("Prompt ID is missing!");
-        return;
-    }
-    
+  useEffect(() => {
     const getPromptDetails = async () => {
-        const response = await fetch(`/api/prompt/${promptId}`);
-        const data = await response.json();
-        setPost({
-            prompt: data.prompt, 
-            tag: data.tag
-        });
-        
+      const response = await fetch(`/api/prompt/${promptId}`);
+      const data = await response.json();
+      setPost({
+        prompt: data.prompt,
+        tag: data.tag,
+      });
     };
-    if(promptId) getPromptDetails();
-  },[promptId])
+
+    if (promptId) getPromptDetails();
+  }, [promptId]);
 
   const editPrompt = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
-    if(!promptId) return alert("Prompt not found!!"); 
-    try{
-      const response = await fetch(`/api/prompt/${promptId}`,{
-        method: 'PATCH',
+    if (!promptId) return alert("Prompt not found!!");
+    try {
+      const response = await fetch(`/api/prompt/${promptId}`, {
+        method: "PATCH",
         body: JSON.stringify({
           prompt: post.prompt,
-          tag: post.tag
+          tag: post.tag,
         }),
-      })
+      });
 
-      if(response.ok){
-        router.push('/');
+      if (response.ok) {
+        router.push("/");
       }
-    }catch(e){
+    } catch (e) {
       console.error(e);
-    }finally{
+    } finally {
       setSubmitting(false);
     }
   };
 
   return (
-      <Form 
+    <Suspense fallback={<div>Loading...</div>}>
+      <Form
         type="Edit"
         post={post}
         setPost={setPost}
         submitting={submitting}
         handleSubmit={editPrompt}
       />
-  )
-}
+    </Suspense>
+  );
+};
 
-export default edit;
+export default EditPrompt;
