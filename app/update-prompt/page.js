@@ -14,7 +14,13 @@ const edit = () => {
 
   const searchParams = useSearchParams(); 
   const promptId = searchParams.get("id");
+
   useEffect(()=>{
+    if (!promptId) {
+        console.error("Prompt ID is missing!");
+        return;
+    }
+    
     const getPromptDetails = async () => {
         const response = await fetch(`/api/prompt/${promptId}`);
         const data = await response.json();
