@@ -10,11 +10,16 @@ const EditPrompt = () => {
     prompt: "",
     tag: "",
   });
-
-  const searchParams = useSearchParams();
-  const promptId = searchParams.get("id");
+  const [promptId, setPromptId] = useState(null);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = searchParams.get("id");
+    setPromptId(id);
+  }, []);
+
+  useEffect(() => {
+    if (!promptId) return;
     const getPromptDetails = async () => {
       const response = await fetch(`/api/prompt/${promptId}`);
       const data = await response.json();
@@ -23,8 +28,7 @@ const EditPrompt = () => {
         tag: data.tag,
       });
     };
-
-    if (promptId) getPromptDetails();
+    getPromptDetails();
   }, [promptId]);
 
   const editPrompt = async (e) => {
