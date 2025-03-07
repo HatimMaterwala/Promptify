@@ -2,12 +2,14 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { useRouter } from "next/navigation";
 const Navbar = () => {
-  const {data:session} = useSession();
-
+  const { data: session } = useSession();
+  const Router = useRouter();
   const [providers, setProviders] = useState(null);
+  const ref = useRef();
 
   useEffect(() => {
     const getProvidersList = async () => {
@@ -17,6 +19,19 @@ const Navbar = () => {
 
     getProvidersList();
   }, []);
+
+  const handleNavbar = () => {
+    if (ref.current.style.display === "inline") {
+      ref.current.style.display = "none";
+    } else {
+      ref.current.style.display = "inline";
+    }
+  };
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/" }); // Redirect to homepage after sign-out
+    ref.current.style.display = "none";
+  };
 
   return (
     <nav
@@ -36,28 +51,67 @@ const Navbar = () => {
         </Link>
       </div>
       {session?.user ? (
-        <div className="buttons space-x-4">
+        <div className="relative buttons space-x-4">
           <button
-            type="button" 
-            onClick={() => signOut()}
-            className="hidden sm:inline bg-white text-black px-3 py-1 rounded-full font-bold border border-r-4 border-b-4 border-black"
+            type="button"
+            onClick={handleSignOut}
+            className="hidden md:inline bg-white text-black px-3 py-1 rounded-full font-bold border border-r-4 border-b-4 border-black"
           >
             Sign Out
           </button>
           <Link href={"/create"}>
-            <button className="hidden sm:inline bg-white text-black px-3 py-1 rounded-full font-bold border border-r-4 border-b-4 border-black">
+            <button className="hidden md:inline bg-white text-black px-3 py-1 rounded-full font-bold border border-r-4 border-b-4 border-black">
               Create Prompt
             </button>
           </Link>
           <Link href={`/champs/${session?.user.id}`}>
             <Image
-              className="bg-blend-screen inline rounded-full"
+              className="hidden md:inline bg-blend-screen rounded-full"
               src={session?.user.image}
               alt="Logo"
               width={40}
               height={40}
             />
           </Link>
+          <Image
+            onClick={handleNavbar}
+            className="cursor-pointer inline md:hidden bg-blend-screen rounded-full"
+            src={session?.user.image}
+            alt="Logo"
+            width={40}
+            height={40}
+          />
+          <div
+            ref={ref}
+            className="hidden absolute right-9 top-9 rounded-l-lg rounded-b-lg bg-slate-50"
+          >
+            <Link href={`/champs/${session?.user.id}`}>
+              <div
+                onClick={() => {
+                  ref.current.style.display = "none";
+                }}
+                className="hover:bg-slate-200 rounded-l-lg rounded-b-none cursor-pointer profile block md:hidden p-1 px-3 border-b-2"
+              >
+                Profile
+              </div>
+            </Link>
+            <Link href={"/create"}>
+              <div
+                onClick={() => {
+                  ref.current.style.display = "none";
+                }}
+                className="hover:bg-slate-200  text-nowrap cursor-pointer create-prompt block md:hidden p-1 px-3 border-b-2"
+              >
+                Create Prompt
+              </div>
+            </Link>
+            <div
+              onClick={handleSignOut}
+              className="hover:bg-slate-200 text-nowrap cursor-pointer signOut block md:hidden p-1 px-3 "
+            >
+              Sign Out
+            </div>
+          </div>
         </div>
       ) : (
         <>
