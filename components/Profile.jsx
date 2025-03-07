@@ -8,7 +8,7 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
         <p className="mt-3 text-xl">{desc}</p>
 
         <div className="mt-5 flex justify-start flex-wrap gap-8">
-          {data.map((post) => {
+          {data.slice().reverse().map((post) => {
             return (
               <Promptcard
                 key={post._id}

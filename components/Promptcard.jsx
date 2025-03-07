@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import Profile from "./Profile";
 import { ToastContainer, toast } from "react-toastify";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
@@ -14,9 +15,14 @@ const Promptcard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
   const [copied,setcopied] = useState(false);
   const Router = useRouter();
   const pathName = usePathname();
+
+  const handleProfileClick = async () => {
+    Router.push(`/champs/${post.creator._id}`)
+  }
+
   return (
     <div className="prompt_card rounded-lg m-auto bg-white w-[90%] p-2 shadow-sm border border-r-4 border-b-4 border-black">
-      <div className="flex justify-between items-center gap-2">
+      <div className="flex justify-between items-center gap-2 w-[100%]">
         <div className="flex justify-center items-center gap-2">
           <div>
             {/* {Create a clickable Profile Image which will redirect to the Profile of that Person} */}
@@ -26,6 +32,7 @@ const Promptcard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
               width={40}
               height={40}
               className="cursor-pointer rounded-full object-contain border border-white"
+              onClick={handleProfileClick}
             />
           </div>
           <div className="flex flex-col justify-center">
@@ -35,7 +42,7 @@ const Promptcard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
         </div>
         <div className="copy px-5">
           <Image
-            src={!copied ? "./copy.svg" : "./copied.svg"}
+            src={!copied ? "/copy.svg" : "/copied.svg"}
             width={20}
             height={20}
             alt="copy"
@@ -55,7 +62,7 @@ const Promptcard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
           {post.tag}
         </p>
       </div>
-      {session?.user.id === post.creator?._id && pathName =='/profile' && 
+      {session?.user.id === post.creator?._id && pathName ==`/champs/${session?.user.id}` && 
         <div className="flex justify-end gap-4 p-2">
           <button className="bg-blue-500 text-white rounded-lg p-2 px-4" onClick={handleEdit}>Edit</button>
           <button className="bg-red-500 text-white rounded-lg p-2 px-4" onClick={handleDelete}>Delete</button>
@@ -64,6 +71,7 @@ const Promptcard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
       <ToastContainer/>
     </div>
   );
+
 };
 
 export default Promptcard;

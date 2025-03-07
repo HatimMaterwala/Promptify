@@ -40,16 +40,16 @@ const Navbar = () => {
           <button
             type="button" 
             onClick={() => signOut()}
-            className="bg-white text-black px-3 py-1 rounded-full font-bold border border-r-4 border-b-4 border-black"
+            className="hidden sm:inline bg-white text-black px-3 py-1 rounded-full font-bold border border-r-4 border-b-4 border-black"
           >
             Sign Out
           </button>
           <Link href={"/create"}>
-            <button className="bg-white text-black px-3 py-1 rounded-full font-bold border border-r-4 border-b-4 border-black">
+            <button className="hidden sm:inline bg-white text-black px-3 py-1 rounded-full font-bold border border-r-4 border-b-4 border-black">
               Create Prompt
             </button>
           </Link>
-          <Link href={"/profile"}>
+          <Link href={`/champs/${session?.user.id}`}>
             <Image
               className="bg-blend-screen inline rounded-full"
               src={session?.user.image}
