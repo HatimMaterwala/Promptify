@@ -20,6 +20,19 @@ const Navbar = () => {
     getProvidersList();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)){
+        ref.current.style.display = "none";
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleNavbar = () => {
     if (ref.current.style.display === "inline") {
       ref.current.style.display = "none";
@@ -90,7 +103,7 @@ const Navbar = () => {
                 onClick={() => {
                   ref.current.style.display = "none";
                 }}
-                className="hover:bg-slate-200 rounded-l-lg rounded-b-none cursor-pointer profile block md:hidden p-1 px-3 border-b-2"
+                className="hover:bg-slate-200 rounded-l-lg rounded-bl-none cursor-pointer profile block md:hidden p-1 px-3 border-b-2"
               >
                 Profile
               </div>
